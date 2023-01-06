@@ -30,13 +30,22 @@ Git管理的空间可以分为三部分，工作区、暂存区和版本库。
 * 工作区：就是你在电脑里能看到的目录。
 * 暂存区：英文叫 stage 或 index。一般存放在 .git 目录下的 index 文件（.git/index）中，所以我们把暂存区有时也叫作索引（index）。
 * 版本库：工作区有一个隐藏目录 .git，这个不算工作区，而是 Git 的版本库。
-## 建立本地仓库
+## 建立本地仓库（git init）
+```
+git init    #建立本地仓库
+```
 使用Git首先要在本地创建一个代码仓库，选择文件夹目录后执行`$ git init`即可，完成后会创建一个名为".git"的文件夹（以.开头为隐藏文件夹，在文件管理器中显示选项卡下勾选显示隐藏的项目可见），无需关注此文件夹中内容，无法直接打开读取其中文件内容。
 输入以下两条指令以设置用户名和邮箱，替换引号内文本为个人信息，Git不会检查信息的有效性，仅作为提交时的附带信息以便其他人联系修改者。若无`--global`则只对当前仓库有效。
 ```
 $ git config --global user.name "your name"
 $ git config --global user.email "your_email@youremail.com"
 ```
+## 克隆远程仓库(git clone)
+```
+git clone [远程仓库地址] #将远程仓库克隆到本地
+```
+当远程仓库已存在时，不需在本地执行`$ git init`，而需要使用`$ git clone`命令。如其名，此命令的功能是将远程仓库的内容克隆到本地。当团队共同开发一个项目时，除了项目的创建者，其他人需要以此命令克隆项目，否则可能会因为本地和远程文件不一致而无法正常同步，不能执行`git fetch`、`git pull`、`git push`等命令，产生不必要的麻烦。
+使用此命令下载Github、Gitee等网站上的项目时会下载“.git”文件夹从而保留版本修改信息，而下载zip压缩包时因不会下载“.git”文件夹，会丢失此部分信息。
 ## 提交文件
 ### 加入暂存区（git add、git status）
 ```
@@ -131,8 +140,16 @@ $ git remote rename [原远程仓库名] [新远程仓库名]  # 修改仓库名
 ### 提交到远程仓库（git push）
 ```
 $ git push
+$ git push [远程仓库名] [分支名]    #将指定分支提交到远程仓库
 ```
-git push可以将本地版本库同步到远程仓库，同时会在本地更新origin/main分支（默认，可更改，也可能为origin/master），此分支即代表远程仓库同步的进度。初次使用git push可能需要进行验证，或者使用带修饰的git push命令，Git会给出相应提示。当版本树存在冲突时无法提交，具体可参考[Git闯关式教程](https://learngitbranching.js.org/?locale=zh_CN)远程仓库相关内容。
+git push可以将本地版本库同步到远程仓库，同时会在本地更新origin/main分支（默认，可更改，也可能为origin/master），此分支即代表远程仓库同步的进度。在仓库中初次使用git push时，Git可能会给出如下提示，意为当前分支没有与远程分支关联，使用所给代码即可将当前分支（此处为master）与远程分支（此处为origin）关联，之后直接输入`git push`即可。
+```
+fatal: The current branch master has no upstream branch.
+To push the current branch and set the remote as upstream, use
+    git push --set-upstream origin master
+```
+当首次连接到远程仓库平台时需要进行账号验证，按提示操作完成登录才能进行提交。
+当版本树存在冲突时无法提交，具体可参考[Git闯关式教程](https://learngitbranching.js.org/?locale=zh_CN)远程仓库相关内容。
 ### 从远程仓库同步（git fetch、git pull）
 ```
 $ git fetch    #获取远程仓库更新
